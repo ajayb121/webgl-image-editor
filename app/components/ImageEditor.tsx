@@ -1,7 +1,7 @@
 const ImageEditor = () => {
   return (
     <div>
-      Image Editor
+      Image Upload
     </div>
   )
 }
