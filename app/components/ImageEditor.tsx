@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import 'gl-matrix';
-import ContrastStretching from "./ContrastStretching";
+import WebglEditor from "./WebglEditor";
 import UploadImage from "./UploadImage";
 
 const ImageEditor: React.FC = () => {
@@ -56,7 +56,7 @@ const ImageEditor: React.FC = () => {
               </button>
             </div>
             <div style={{ minHeight: "400px" }}>
-              <ContrastStretching
+              <WebglEditor
                 imageUrl={URL.createObjectURL(selectedImage)}
                 brightness={Number(brightnesValue) / 100}
                 exposure={parseFloat(exposureValue) / 100}
