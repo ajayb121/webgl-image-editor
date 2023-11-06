@@ -58,6 +58,7 @@ const ImageEditor: React.FC = () => {
                 removeImage={() => {
                   setSelectedImage(null);
                   setIsImageReset(true);
+                  restoreDefaultValues();
                 }}
               />
             </div>
