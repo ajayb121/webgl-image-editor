@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { mat4 } from 'gl-matrix';
 import ZoomableImage from './Zoom';
 
 // Vertex shader
@@ -109,7 +108,6 @@ const WebglEditor = ({
     const positionLocation = gl.getAttribLocation(program, 'a_position');
     const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord');
     const imageLocation = gl.getUniformLocation(program, 'u_image');
-    const projectionMatrixLocation = gl.getUniformLocation(program, 'u_projection_matrix');
 
     // Create a buffer for the texture coordinates
     const texCoordBuffer = gl.createBuffer();
