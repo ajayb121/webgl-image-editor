@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+// Define the props for the UploadImage component
 interface UploadImageProps {
-  onImageUpload: (imageUrl: File) => void;
-  isImageReset: boolean;
+  onImageUpload: (imageUrl: File) => void; // Callback function for image upload
+  isImageReset: boolean; // A flag to reset the selected image
 }
 
 const UploadImage = ({ onImageUpload, isImageReset }: UploadImageProps): JSX.Element => {
+  // Create a ref for the file input element
   const inputRef = useRef(null);
   const [error, setError] = useState("");
 
+  // Function to check if the selected image dimensions are within the limit
   const checkImageSize = (image: HTMLImageElement) => {
     if (image.naturalWidth > 4096 || image.naturalHeight > 4096) {
       setError("Image dimensions exceeded 4096x4096. Please upload image with lower resolution");
@@ -17,9 +20,10 @@ const UploadImage = ({ onImageUpload, isImageReset }: UploadImageProps): JSX.Ele
     return true;
   };
 
+  // Event handler for file upload
   const onFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setError("");
+      setError(""); // Clear any previous error messages
 
       const selectedImage = event.target.files[0];
 
@@ -39,6 +43,7 @@ const UploadImage = ({ onImageUpload, isImageReset }: UploadImageProps): JSX.Ele
     }
   }
 
+  // Use useEffect to reset the input value when isImageReset changes
   useEffect(() => {
     if (isImageReset && inputRef?.current) {
       (inputRef.current as HTMLInputElement).value = '';

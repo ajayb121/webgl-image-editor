@@ -6,15 +6,19 @@ import WebglEditor from "./WebglEditor";
 import UploadImage from "./UploadImage";
 
 const ImageEditor: React.FC = () => {
+  // State to manage the selected image and various style settings
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [brightnesValue, setBrightnessValue] = useState("0");
   const [exposureValue, setExposureValue] = useState("100");
   const [contrastValue, setContrastValue] = useState("100");
   const [isImageReset, setIsImageReset] = useState(false);
+  
+  // Callback function to handle image upload
   const onImageUpload = (image: File) => {
     setSelectedImage(image);
   }
 
+  // Function to restore default style values
   const restoreDefaultValues = () => {
     setBrightnessValue("0");
     setExposureValue("100");
@@ -24,8 +28,10 @@ const ImageEditor: React.FC = () => {
   return (
     <div>
       {!selectedImage ? (
+        // Display the UploadImage component when no image is selected
         <UploadImage onImageUpload={onImageUpload} isImageReset={isImageReset} />
       ) : (
+        // Display image editing controls when an image is selected
         <div>
           <div className="flex gap-6">
             <div className="w-72 pt-12">
@@ -56,6 +62,7 @@ const ImageEditor: React.FC = () => {
                 exposure={parseFloat(exposureValue) / 100}
                 contrastValue={parseFloat(contrastValue) / 100}
                 removeImage={() => {
+                  // Remove the selected image and reset the style settings
                   setSelectedImage(null);
                   setIsImageReset(true);
                   restoreDefaultValues();

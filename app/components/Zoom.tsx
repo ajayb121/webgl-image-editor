@@ -8,26 +8,31 @@ import {
   ChevronDownIcon
 } from '@heroicons/react/24/solid'
 
+// Define the props for the ZoomableImage component
 interface ZoomableImageProps {
-  imageUrl: string;
+  imageUrl: string; // URL of the image to display
 }
 
 const ZoomableImage = ({ imageUrl }: ZoomableImageProps): JSX.Element => {
+  // State for controlling image scale and position
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
+  // Function to zoom in the image
   const handleZoomIn = () => {
     if (scale < 2) {
       setScale(scale + 0.1);
     }
   };
 
+  // Function to zoom out the image
   const handleZoomOut = () => {
     if (scale > 0.5) {
       setScale(scale - 0.1);
     }
   };
 
+  // Function to pan the image in the specified direction
   const handlePan = (direction: 'left' | 'right' | 'up' | 'down') => {
     const step = 50; // Adjust the panning step as needed
     setPosition((prevPosition) => {
@@ -44,6 +49,7 @@ const ZoomableImage = ({ imageUrl }: ZoomableImageProps): JSX.Element => {
     });
   };
 
+  // Function to reset the image zoom and position
   const resetZoom = () => {
     setScale(1);
     setPosition({ x: 0, y: 0 });
