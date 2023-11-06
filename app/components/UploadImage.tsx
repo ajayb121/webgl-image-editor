@@ -47,15 +47,10 @@ const UploadImage = ({ onImageUpload, isImageReset }: UploadImageProps): JSX.Ele
 
   return (
     <div>
-      <div style={{
-        maxWidth: '100%',
-        height: '300px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-      }}>
-        <div style={{ width: "450px" }}>
+      <div
+        className='max-w-full h-[300px] flex items-center justify-center flex-col'
+      >
+        <div className='w-[450px]'>
           <input
             ref={inputRef}
             type="file"
@@ -67,16 +62,8 @@ const UploadImage = ({ onImageUpload, isImageReset }: UploadImageProps): JSX.Ele
           />
         </div>
         {error && (
-          <div style={{
-            paddingTop: "20px",
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            <p style={{
-              width: "325px",
-              color: "red"
-            }}>{error}</p>
+          <div className="pt-4 flex items-center justify-center">
+            <p className="w-72 text-red-400">{error}</p>
           </div>
         )}
       </div>

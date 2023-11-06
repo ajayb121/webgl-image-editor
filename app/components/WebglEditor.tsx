@@ -66,7 +66,6 @@ interface WebglEditorProps {
   brightness?: number;
   exposure?: number;
   contrastValue?: number;
-  zoomFactor?: number;
   removeImage: () => void;
 }
 
@@ -75,12 +74,10 @@ const WebglEditor = ({
   brightness = 0,
   exposure = 1,
   contrastValue = 1,
-  zoomFactor = 1,
   removeImage,
 }: WebglEditorProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [imageDataURL, setImageDataURL] = useState("");
-  const [zoom, setZoom] = useState(zoomFactor); // Initial zoom factor
   const [downloadResolution, setDownloadResolution] = useState(1);
 
   useEffect(() => {
@@ -146,33 +143,6 @@ const WebglEditor = ({
     const img = new Image();
     img.src = imageUrl;
 
-    // Update the projection matrix with the zoom factor
-    function updateProjectionMatrix() {
-      if (!canvas || !gl) return;
-      const projectionMatrix = mat4.create();
-      const originalFOV = 45.0; // Your initial FOV
-      const aspectRatio = canvas.width / canvas.height;
-      const near = 0.1;
-      const far = 1000.0;
-
-      // Calculate the new FOV based on the current zoom factor
-      const newFOV = originalFOV / zoom;
-
-      mat4.perspective(projectionMatrix, newFOV, aspectRatio, near, far);
-
-      gl.uniformMatrix4fv(projectionMatrixLocation, false, projectionMatrix);
-    }
-
-    // Update the projection matrix when the zoom factor changes
-    updateProjectionMatrix();
-
-    // Render the scene
-    function renderScene() {
-      if (!gl) return;
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.drawArrays(gl.TRIANGLES, 0, 6);
-    }
-
     img.onload = () => {
       canvas.width = img.width;
       canvas.height = img.height;
@@ -232,44 +202,52 @@ const WebglEditor = ({
 
   return (
     <>
-      <div style={{ paddingTop: "10px" }}>
-        {imageDataURL ? <ZoomableImage imageUrl={imageDataURL} /> : <div style={{ width: '100%', height: '100%', background: 'gray' }}></div>}
+      <div className='pt-2.5'>
+        {imageDataURL && <ZoomableImage imageUrl={imageDataURL} />}
       </div>
 
-      <div style={{ display: "flex", paddingTop: "10px", justifyContent: "space-between" }}>
+      <div className="flex pt-2.5 justify-between">
         <div>
-          <div style={{ textAlign: "right" }}>
-            <button onClick={removeImage} type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900" style={{ height: "48px", marginBottom: 0 }}>
+          <div className="text-right">
+            <button 
+            onClick={removeImage} 
+            type="button" 
+            className="h-12 mb-0 focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+            >
               Remove Image
             </button>
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "end" }}>
+        <div className="flex justify-end">
           <div className="inline-block relative w-64">
             <select
               onChange={(e) => {
                 setDownloadResolution(Number(e.target.value))
               }}
               value={downloadResolution}
-              className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-              style={{ height: "48px" }}
+              className="h-[48px] block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
             >
               <option value={1}>Normal Resolution</option>
               <option value={2}>Less Resolution</option>
               <option value={3}>Very Less Resolution</option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+            <div
+              className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+            >
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
             </div>
           </div>
 
-          <button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center" onClick={downloadImage} style={{ marginLeft: "10px" }}>
+          <button
+            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center ml-2.5"
+            onClick={downloadImage}
+          >
             <svg className="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" /></svg>
             <span>Download</span>
           </button>
         </div>
       </div>
-      <div style={{ height: "20px", width: "20px", visibility: "hidden", overflow: "hidden" }}>
+      <div className="h-[20px] w-[20px] invisible overflow-hidden">
         <canvas ref={canvasRef}></canvas>
       </div>
     </>
