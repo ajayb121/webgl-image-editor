@@ -35,19 +35,6 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 
 
-## Running Unit tests
-
-Unit tests are added to the project using Jest and React Testing Library.
-
-Run the unit tests using the following commands:
-
-```bash
-npm run test
-# or
-yarn test
-```
-
-
 
 ## Technologies used
 
